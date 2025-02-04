@@ -1,0 +1,24 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "search.exclude": {
+        "**/public": true,
+        "**/database/schema": true,
+        "**/database/seeds": true
+    },
+    "terminal.integrated.cursorStyle": "line",
+    "terminal.integrated.cursorWidth": 2,
+    "terminal.integrated.cursorBlinking": true,
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "intelephense.environment.documentRoot": "./public",
+    "bladeFormatter.format.sortHtmlAttributes": "custom",
+    "bladeFormatter.format.sortTailwindcssClasses": false,
+    "bladeFormatter.format.wrapAttributes": "force",
+    "bladeFormatter.format.wrapLineLength": 120,
+    "bladeFormatter.format.customHtmlAttributesOrder": "id, name, class, type, role, tabindex, data-.+, wire.+, x-.+, @.+, aria.+",
+    "laravel-pint.preset": "laravel",
+    "editor.fontFamily": "'Cascadia Code PL', 'MesloLGS NF', 'Fira Code', Consolas, 'Courier New', monospace"
+}

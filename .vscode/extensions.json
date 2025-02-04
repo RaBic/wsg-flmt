@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "coenraads.disableligatures",
+        "formulahendry.auto-close-tag",
+        "laravel.vscode-laravel",
+        "mrmlnc.vscode-apache",
+        "obliviousharmony.vscode-php-codesniffer",
+        "open-southeners.laravel-pint",
+        "shufo.vscode-blade-formatter",
+    ]
+}

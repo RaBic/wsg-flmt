@@ -1,0 +1,26 @@
+/* 
+.fi-fieldset > legend {
+    color: rgba(var(--gray-400), var(--tw-text-opacity));
+}
+
+.fi-fo-field-wrp-label > span {
+    font-weight: 600;
+    color: rgba(var(--gray-500), var(--tw-text-opacity));
+    background-color: rgb(var(--gray-100));
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+}
+
+
+.dark .fi-fieldset > legend {
+    color: rgba(var(--gray-500), var(--tw-text-opacity));
+}
+
+.dark .fi-fo-field-wrp-label > span {
+    color: rgba(var(--gray-400), var(--tw-text-opacity));
+    background-color: rgb(var(--gray-800));
+}
+
+.fi-ta-summary-row.bg-gray-50 {
+    display: none;
+} */

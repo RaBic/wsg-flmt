@@ -1,0 +1,74 @@
+{
+    "preset": "laravel",
+    "rules": {
+        "concat_space": {
+            "spacing": "one"
+        },
+        "method_argument_space": {
+            "on_multiline": "ensure_fully_multiline",
+            "keep_multiple_spaces_after_comma": false
+        },
+        "explicit_string_variable": true,
+        "align_multiline_comment": {
+            "comment_type": "all_multiline"
+        },
+        "combine_consecutive_issets": true,
+        "combine_consecutive_unsets": true,
+        "final_class": false,
+        "fully_qualified_strict_types": {
+            "import_symbols": true,
+            "leading_backslash_in_global_namespace": true,
+            "phpdoc_tags": [
+                "param",
+                "phpstan-param",
+                "phpstan-property",
+                "phpstan-property-read",
+                "phpstan-property-write",
+                "phpstan-return",
+                "phpstan-var",
+                "property",
+                "property-read",
+                "property-write",
+                "psalm-param",
+                "psalm-property",
+                "psalm-property-read",
+                "psalm-property-write",
+                "psalm-return",
+                "psalm-var",
+                "return",
+                "see",
+                "throws",
+                "var"
+            ]
+        },
+        "global_namespace_import": {
+            "import_classes": true,
+            "import_functions": true
+        },
+        "logical_operators": true,
+        "mb_str_functions": true,
+        "new_with_parentheses": {
+            "anonymous_class": true,
+            "named_class": true
+        },
+        "no_empty_comment": true,
+        "protected_to_private": true,
+        "simplified_if_return": true,
+        "single_trait_insert_per_statement": true,
+        "ternary_to_null_coalescing": true,
+        "trim_array_spaces": true,
+        "use_arrow_functions": true,
+        "no_extra_blank_lines": {
+            "tokens": [
+                "curly_brace_block",
+                "extra",
+                "parenthesis_brace_block",
+                "square_brace_block",
+                "switch",
+                "throw",
+                "use",
+                "use_trait"
+            ]
+        }
+    }
+}
