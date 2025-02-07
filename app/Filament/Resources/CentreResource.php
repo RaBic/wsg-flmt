@@ -85,7 +85,7 @@ class CentreResource extends Resource
                 Forms\Components\Fieldset::make('Details')
                     ->schema([
                         Forms\Components\TextArea::make('excerpt')
-                            ->label('Kutzbeschreibung'),
+                            ->label('Kurzbeschreibung'),
                         Forms\Components\Select::make('studies')
                             ->label('Studien')
                             ->placeholder('Studien wählen')
