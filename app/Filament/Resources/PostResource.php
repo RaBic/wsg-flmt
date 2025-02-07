@@ -225,6 +225,20 @@ class PostResource extends Resource
                     )
                     ->alignment(Alignment::Center)
                     ->grow(),
+                Tables\Columns\TextColumn::make('type')
+                    ->formatStateUsing(
+                        fn (string $state): string => PostType::toSelectOptions()[$state]
+                    )
+                    ->color(
+                        function (string $state): string {
+                            $color = 'primary';
+                            if ($state === PostType::Event->value) {
+                                $color = 'info';
+                            }
+
+                            return $color;
+                        }
+                    ),
             ])
             ->filters([
                 Filters\SelectFilter::make('type')
