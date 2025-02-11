@@ -6,7 +6,8 @@ use App\Filament\Concerns\HasBlockFormTrait;
 use App\Filament\Concerns\HasBlockTableTrait;
 use Filament\Resources\RelationManagers\Concerns\Translatable;
 use Filament\Resources\RelationManagers\RelationManager;
-use Livewire\Attributes\Reactive;
+
+// use Livewire\Attributes\Reactive;
 
 class BlocksRelationManager extends RelationManager
 {

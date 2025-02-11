@@ -65,6 +65,7 @@ trait HasBlockFormTrait
                             ),
                     ])
                     ->defaultItems(0)
+                    ->maxItems(1)
                     ->itemLabel(
                         function (array $state, RelationManager $livewire): ?string {
                             $class = Str::of(get_class($livewire->getOwnerRecord()))
