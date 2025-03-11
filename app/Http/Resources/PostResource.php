@@ -19,10 +19,10 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->get('title')->first()->toArray()['title'],
-            'slug' => $this->get('slug')->first()->toArray()['slug'],
+            'title' => $this->getTranslations('title'),
+            'slug' => $this->getTranslations('slug'),
             'type' => $this->type,
-            'content' => $this->get('content')->first()->toArray()['content'],
+            'content' => $this->getTranslations('content'),
             'published_at' => $this->published_at,
             'updated_at' => $this->updated_at,
             'image' => $this->image,

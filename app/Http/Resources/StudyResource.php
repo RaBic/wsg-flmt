@@ -19,11 +19,11 @@ class StudyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->get('title')->first()->toArray()['title'],
+            'title' => $this->getTranslations('title'),
             'slug' => $this->slug,
             'shortcode' => $this->shortcode,
             'type' => $this->type,
-            'content' => $this->get('content')->first()->toArray()['content'],
+            // 'content' => $this->content,
             'sort' => $this->sort,
             'published_at' => $this->published_at,
             'updated_at' => $this->updated_at,

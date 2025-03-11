@@ -19,9 +19,9 @@ class PageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->get('title')->first()->toArray()['title'],
-            'slug' => $this->get('slug')->first()->toArray()['slug'],
-            'content' => $this->get('content')->first()->toArray()['content'],
+            'title' => $this->getTranslations('title'),
+            'slug' => $this->getTranslations('slug'),
+            'content' => $this->getTranslations('content'),
             'sort' => $this->sort,
             'published_at' => $this->published_at,
             'updated_at' => $this->updated_at,
