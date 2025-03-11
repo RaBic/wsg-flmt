@@ -10,9 +10,9 @@ class CompanyContact extends Settings
 
     public ?string $fon;
 
-    public ?string $fax;
-
     public string $address;
+
+    public string $workhours;
 
     public ?string $linkedin;
 

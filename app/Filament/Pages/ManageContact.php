@@ -27,14 +27,14 @@ class ManageContact extends SettingsPage
                     ->label('(Post-)Adresse')
                     ->required()
                     ->autosize(),
+                Forms\Components\TextArea::make('workhours')
+                    ->label('Erreichbarkeit'),
                 Forms\Components\TextInput::make('email')
                     ->label('E-Mail-Adresse')
                     ->required(),
                 Forms\Components\TextInput::make('fon')
                     ->label('Telefonnummer')
                     ->required(),
-                Forms\Components\TextInput::make('fax')
-                    ->label('Faxnummer'),
                 Forms\Components\TextInput::make('linkedin')
                     ->label('LinkedIn-URL')
                     ->required(),
