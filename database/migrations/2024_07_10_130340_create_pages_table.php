@@ -17,7 +17,6 @@ return new class() extends Migration
             $table->unsignedBigInteger('sort')->default(999);
             $table->string('title', 100);
             $table->string('slug', 100);
-            $table->string('shortcode', 100);
             $table->json('content')->nullable()->default(null);
             $table->dateTime('published_at')->nullable()->default(null);
             $table->foreignIdFor(User::class);

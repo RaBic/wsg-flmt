@@ -6,6 +6,8 @@ use App\Models\Centre;
 use App\Models\ChangeLog;
 use Spatie\Geocoder\Facades\Geocoder;
 
+use function Illuminate\Support\defer;
+
 class CentreObserver
 {
     /**

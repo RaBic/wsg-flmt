@@ -23,7 +23,7 @@ return new class() extends Migration
             $table->string('email')->nullable()->default(null);
             $table->string('phone')->nullable()->default(null);
             $table->foreignIdFor(Unit::class);
-            $table->boolean('published_at')->default(false);
+            $table->boolean('published')->default(false);
             $table->unsignedBigInteger('sort')->default(999);
             $table->foreignIdFor(User::class);
             $table->timestamps();
