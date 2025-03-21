@@ -74,14 +74,14 @@ class Study extends Model
         return $this->morphMany(Block::class, 'blockable');
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function centres(): BelongsToMany
     {
         return $this->belongsToMany(Centre::class, 'study_centre', 'study_id', 'centre_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopePublished($query): void

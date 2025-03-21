@@ -5,9 +5,11 @@ use App\Http\Resources\PageResource;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\SettingsResource;
 use App\Http\Resources\StudyResource;
+use App\Http\Resources\TeamResource;
 use App\Models\Page;
 use App\Models\Post;
 use App\Models\Study;
+use App\Models\Team;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -137,5 +139,35 @@ Route::group(
 
             return SettingsResource::collection($settings);
         });
+
+        Route::post('/team-members', function (Request $request) {
+            $teamMembersQuery = Team::query()
+                ->with(['image']);
+
+            if ($request->has('filter')) {
+                $filter = $request->input('filter');
+                foreach ($filter as $key => $value) {
+                    if ($key === 'published') {
+                        $teamMembersQuery = $teamMembersQuery->published();
+                    } else {
+                        $teamMembersQuery = $teamMembersQuery->where($key, $value);
+                    }
+                }
+            }
+
+            $teamMembersQuery = $teamMembersQuery->orderBy('sort');
+
+            if ($request->has('limit')) {
+                $limit = $request->input('limit');
+                $teamMembersQuery = $teamMembersQuery->limit($limit);
+            }
+
+            $teamMembers = $teamMembersQuery->get()->values();
+
+            return TeamResource::collection($teamMembers);
+        });
+        Route::get('/team/{id}', fn ($id) => new TeamResource(
+            Team::where('id', $id)->with(['image'])->firstOrFail()
+        ));
     }
 );

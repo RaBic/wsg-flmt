@@ -40,6 +40,13 @@ class Page extends Model
         'user_id',
     ];
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['image'];
+
     public $translatable = ['title', 'slug', 'content'];
 
     /**

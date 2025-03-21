@@ -46,6 +46,15 @@ class Team extends Model
     ];
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['image', 'unit'];
+
+    public $translatable = ['title', 'excerpt', 'description'];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -59,22 +68,20 @@ class Team extends Model
         ];
     }
 
-    public $translatable = ['title', 'excerpt', 'description'];
-
     /* relations */
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     /**
