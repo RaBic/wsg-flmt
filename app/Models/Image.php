@@ -18,6 +18,11 @@ class Image extends Model
 {
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'path' => 'required|string',
         'meta' => 'nullable|array',
@@ -27,7 +32,7 @@ class Image extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'path',
@@ -37,6 +42,9 @@ class Image extends Model
         'user_id',
     ];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['path'];
 
     /**
@@ -53,12 +61,17 @@ class Image extends Model
 
     /**
      * Get the parent imageable model (user or post).
+     *
+     * @return MorphTo<Model, $this>
      */
     public function imageable(): MorphTo
     {
         return $this->morphTo();
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

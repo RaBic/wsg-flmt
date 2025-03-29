@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Observers\TeamObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -17,6 +18,11 @@ class Team extends Model
 {
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'name' => 'required|string',
         'slug' => 'required|string',
@@ -30,7 +36,7 @@ class Team extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -43,15 +49,19 @@ class Team extends Model
         'published',
         'user_id',
         'unit_id',
+        'updated_at',
     ];
 
     /**
      * The relationships that should always be loaded.
      *
-     * @var array
+     * @var list<string>
      */
     protected $with = ['image', 'unit'];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['title', 'excerpt', 'description'];
 
     /**
@@ -68,32 +78,33 @@ class Team extends Model
         ];
     }
 
-    /* relations */
-    public function image(): MorphOne
+    /**
+     * @return MorphMany<Image, $this>
+     */
+    public function image(): MorphMany
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 
+    /**
+     * @return BelongsTo<Unit, $this>
+     */
     public function unit(): BelongsTo
     {
         return $this->belongsTo(Unit::class);
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Scope a query to only include published artists.
-     */
-    public function scopePublished($query): void
+    /** @param Builder<$this> $query */
+    public function scopePublished(Builder $query): void
     {
         $query->where('published', true);
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }

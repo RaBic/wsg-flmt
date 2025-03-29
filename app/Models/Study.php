@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Observers\StudyObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -18,10 +19,13 @@ use Spatie\Translatable\HasTranslations;
 #[ObservedBy(StudyObserver::class)]
 class Study extends Model
 {
-    /** @use HasFactory<\Database\Factories\StudyFactory> */
-    // use HasFactory;
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'title' => 'required|string',
         'shortcode' => 'required|string|max:32',
@@ -35,7 +39,7 @@ class Study extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'title',
@@ -46,8 +50,12 @@ class Study extends Model
         'sort',
         'published_at',
         'user_id',
+        'updated_at',
     ];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['title', 'content'];
 
     /**
@@ -63,34 +71,41 @@ class Study extends Model
         ];
     }
 
-    /* relations */
+    /**
+     * @return MorphOne<Image, $this>
+     */
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
 
+    /**
+     * @return MorphMany<Block, $this>
+     */
     public function blocks(): MorphMany
     {
         return $this->morphMany(Block::class, 'blockable');
     }
 
+    /**
+     * @return BelongsToMany<Centre, $this, StudyCentre>
+     */
     public function centres(): BelongsToMany
     {
         return $this->belongsToMany(Centre::class, 'study_centre', 'study_id', 'centre_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @param Builder<$this> $query */
     public function scopePublished($query): void
     {
         $query->whereNotNull('published_at')->where('published_at', '<', now());
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }

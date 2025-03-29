@@ -19,6 +19,11 @@ class Centre extends Model
 
     protected $table = 'centres';
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     protected $rules = [
         'centre' => 'required|string',
         'unit' => 'required|string',
@@ -31,6 +36,11 @@ class Centre extends Model
         'email' => 'nullable|email',
     ];
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
     protected $fillable = [
         'centre',
         'unit',
@@ -48,10 +58,13 @@ class Centre extends Model
     /**
      * The relationships that should always be loaded.
      *
-     * @var array
+     * @var list<string>
      */
     protected $with = ['studies'];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['leader_position', 'excerpt'];
 
     /**
@@ -67,12 +80,17 @@ class Centre extends Model
         ];
     }
 
-    /* relations */
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsToMany<Study, $this, StudyCentre>
+     */
     public function studies(): BelongsToMany
     {
         return $this->belongsToMany(Study::class, 'study_centre', 'centre_id', 'study_id');

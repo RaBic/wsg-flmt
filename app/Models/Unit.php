@@ -13,6 +13,11 @@ class Unit extends Model
 {
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'name' => 'required|string',
     ];
@@ -20,7 +25,7 @@ class Unit extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'name',
@@ -28,8 +33,14 @@ class Unit extends Model
         'user_id',
     ];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['name'];
 
+    /**
+     * @return HasMany<Team, $this>
+     */
     public function team(): HasMany
     {
         return $this->hasMany(Team::class);

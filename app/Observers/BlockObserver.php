@@ -12,6 +12,11 @@ class BlockObserver
      */
     public function created(Block $block): void
     {
+        $relationClass = '\\' . $block->blockable_type;
+        $relationClass::find($block->blockable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'block',
             'model_id' => $block->id,
@@ -24,6 +29,11 @@ class BlockObserver
      */
     public function updated(Block $block): void
     {
+        $relationClass = '\\' . $block->blockable_type;
+        $relationClass::find($block->blockable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'block',
             'model_id' => $block->id,
@@ -36,6 +46,11 @@ class BlockObserver
      */
     public function deleted(Block $block): void
     {
+        $relationClass = '\\' . $block->blockable_type;
+        $relationClass::find($block->blockable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'block',
             'model_id' => $block->id,

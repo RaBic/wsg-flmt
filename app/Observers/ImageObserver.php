@@ -12,6 +12,11 @@ class ImageObserver
      */
     public function created(Image $image): void
     {
+        $relationClass = '\\' . $image->imageable_type;
+        $relationClass::find($image->imageable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'image',
             'model_id' => $image->id,
@@ -24,6 +29,11 @@ class ImageObserver
      */
     public function updated(Image $image): void
     {
+        $relationClass = '\\' . $image->imageable_type;
+        $relationClass::find($image->imageable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'image',
             'model_id' => $image->id,
@@ -36,6 +46,11 @@ class ImageObserver
      */
     public function deleted(Image $image): void
     {
+        $relationClass = '\\' . $image->imageable_type;
+        $relationClass::find($image->imageable_id)->update([
+            'updated_at' => now(),
+        ]);
+
         ChangeLog::create([
             'model' => 'image',
             'model_id' => $image->id,

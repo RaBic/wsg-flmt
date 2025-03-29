@@ -14,11 +14,15 @@ use Spatie\Translatable\HasTranslations;
  * @mixin IdeHelperBlock
  */
 #[ObservedBy(BlockObserver::class)]
-
 class Block extends Model
 {
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'purpose' => 'nullable|string',
         'title' => 'required|string',
@@ -29,7 +33,7 @@ class Block extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'purpose',
@@ -37,8 +41,12 @@ class Block extends Model
         'title',
         'content',
         'user_id',
+        'updated_at',
     ];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['title', 'content', 'image'];
 
     /**
@@ -55,19 +63,26 @@ class Block extends Model
     }
 
     /**
-     * Get the parent blockable model (page, study, ...).
+     * Get the parent imageable model (user or post).
+     *
+     * @return MorphTo<Model, $this>
      */
     public function blockable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /* relations */
+    /**
+     * @return MorphOne<Image, $this>
+     */
     public function image(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

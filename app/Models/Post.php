@@ -4,10 +4,10 @@ namespace App\Models;
 
 use App\Observers\PostObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -18,6 +18,11 @@ class Post extends Model
 {
     use HasTranslations;
 
+    /**
+     * The attributes that are used for validation.
+     *
+     * @var array<string, string>
+     */
     public static $rules = [
         'type' => 'required|string|in:blog,event',
         'title' => 'required|string',
@@ -29,7 +34,7 @@ class Post extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'type',
@@ -38,15 +43,19 @@ class Post extends Model
         'content',
         'published_at',
         'user_id',
+        'updated_at',
     ];
 
     /**
      * The relationships that should always be loaded.
      *
-     * @var array
+     * @var list<string>
      */
     protected $with = ['image'];
 
+    /**
+     * @var list<string>
+     */
     public $translatable = ['title', 'slug', 'content'];
 
     /**
@@ -62,29 +71,33 @@ class Post extends Model
         ];
     }
 
-    /* relations */
-    public function image(): MorphOne
+    /**
+     * @return MorphMany<Image, $this>
+     */
+    public function image(): MorphMany
     {
-        return $this->morphOne(Image::class, 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 
+    /**
+     * @return MorphMany<Block, $this>
+     */
     public function blocks(): MorphMany
     {
         return $this->morphMany(Block::class, 'blockable');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /** @param Builder<$this> $query */
     public function scopePublished($query): void
     {
         $query->whereNotNull('published_at')->where('published_at', '<', now());
-    }
-
-    protected function getRedirectUrl(): string
-    {
-        return $this->getResource()::getUrl('index');
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -11,12 +10,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 final class ChangeLog extends Model
 {
-    use HasFactory;
-
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $fillable = [
         'model',
@@ -24,6 +21,7 @@ final class ChangeLog extends Model
         'action',
     ];
 
+    /** @param Builder<$this> $query */
     public function scopeOfModel(Builder $query, string $model): void
     {
         $query->where('model', $model);
