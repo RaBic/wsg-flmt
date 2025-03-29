@@ -2,16 +2,16 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Team;
+use App\Models\Centre;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin Team
+ * @mixin Centre
  */
-class TeamResource extends JsonResource
+class CentreResource extends JsonResource
 {
-    public function __construct(Team $resource)
+    public function __construct(Centre $resource)
     {
         parent::__construct($resource);
     }
@@ -25,15 +25,17 @@ class TeamResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'title' => $this->getTranslations('title'),
-            'excerpt' => $this->getTranslations('excerpt'),
-            'description' => $this->getTranslations('description'),
-            'sort' => $this->sort,
-            'updated_at' => $this->updated_at,
-            'image' => $this->image,
+            'centre' => $this->centre,
             'unit' => $this->unit,
+            'address' => $this->address,
+            'geocode' => $this->geocode,
+            'leader' => $this->leader,
+            'leader_position' => $this->getTranslations('leader_position'),
+            'excerpt' => $this->getTranslations('excerpt'),
+            'url' => $this->url,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

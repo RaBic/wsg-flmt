@@ -18,6 +18,7 @@ use Filament\Tables\Filters;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Stringable;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Spatie\Image\Enums\Fit;
 use Spatie\Image\Image;
@@ -54,7 +55,7 @@ class StudyResource extends Resource
                 Forms\Components\Hidden::make('published_at')->default(null),
                 Forms\Components\Hidden::make('user_id')
                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                     }),
 
                 Forms\Components\TextInput::make('shortcode')
@@ -76,13 +77,13 @@ class StudyResource extends Resource
                     ->required()
                     ->selectablePlaceholder(false),
 
-                Forms\Components\TextArea::make('title')
+                Forms\Components\Textarea::make('title')
                     ->label('Bezeichnung')
                     ->rows(6)
                     ->required(),
 
                 Forms\Components\Repeater::make('image')
-                    ->label(false)
+                    ->label(null)
                     ->relationship('image')
                     ->defaultItems(1)
                     ->addable(false)
@@ -90,18 +91,21 @@ class StudyResource extends Resource
                     ->schema([
                         Forms\Components\Hidden::make('user_id')
                             ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                                $component->state(Filament::auth()->user()->getAuthIdentifier());
+                                $component->state(Filament::auth()->user()?->getAuthIdentifier());
                             }),
                         Forms\Components\Hidden::make('purpose')
                             ->afterStateHydrated(function (Forms\Components\Hidden $component) {
                                 $component->state('image');
                             }),
                         Forms\Components\FileUpload::make('path')
-                            ->label(false)
+                            ->label(null)
                             ->image()
                             ->directory(
                                 function (Forms\Get $get): string {
-                                    $slug = $get('../../slug') ?? date('Ymd');
+                                    $slug = date('Ymd');
+                                    if (is_string($get('../../slug'))) {
+                                        $slug = $get('../../slug');
+                                    }
 
                                     return "study/{$slug}/logo";
                                 }
@@ -111,7 +115,7 @@ class StudyResource extends Resource
                             ->getUploadedFileNameForStorageUsing(
                                 function (TemporaryUploadedFile $file): string {
                                     $fullfilename = (string) $file->getClientOriginalName();
-                                    $point = mb_strrpos($fullfilename, '.');
+                                    $point = mb_strrpos($fullfilename, '.') ?: mb_strlen($fullfilename);
                                     $filename = mb_substr($fullfilename, 0, $point);
                                     $extension = mb_substr($fullfilename, $point);
 
@@ -122,12 +126,18 @@ class StudyResource extends Resource
                             ),
                     ])
                     ->itemLabel(
-                        function (array $state, Forms\Get $get): ?string {
-                            $label = $state['path'] ? (string) str(collect($state['path'])
-                                ->first())
+                        function (array $state, Forms\Get $get): ?Stringable {
+                            if (empty($state['path'])) {
+                                return null;
+                            }
+
+                            $label = str(reset($state['path']))
                                 ->replace('study/', '')
-                                ->replace('logo/', '')
-                                ->replace($get('slug') . '/', '') : null;
+                                ->replace('logo/', '');
+
+                            if (is_string($get('slug'))) {
+                                $label = $label->replace($get('slug') . '/', '');
+                            }
 
                             return $label;
                         }
@@ -156,7 +166,8 @@ class StudyResource extends Resource
                             @mkdir(storage_path('app/public/thumb'), 0755, true);
                         }
                         $tree = '';
-                        str($record->image->path)
+                        $imagePath = $record->image->getTranslations('path')['de'];
+                        str($imagePath)
                             ->explode('/')
                             ->slice(0, -1)
                             ->each(function ($dir) use (&$tree) {
@@ -165,15 +176,15 @@ class StudyResource extends Resource
                                     @mkdir(storage_path('app/public/thumb' . $tree), 0755, true);
                                 }
                             });
-                        if (! file_exists(storage_path('app/public/thumb/' . $record->image->path))) {
-                            $image = Image::load(storage_path('app/public/' . $record->image->path));
+                        if (! file_exists(storage_path('app/public/thumb/' . $imagePath))) {
+                            $image = Image::load(storage_path('app/public/' . $imagePath));
                             if ($image->getWidth() > 192) {
                                 $image->fit(Fit::Crop, 192, 144);
                             }
-                            $image->save(storage_path('app/public/thumb/' . $record->image->path));
+                            $image->save(storage_path('app/public/thumb/' . $imagePath));
                         }
 
-                        return 'thumb/' . $record->image->path;
+                        return 'thumb/' . $imagePath;
                     }),
                 Tables\Columns\TextColumn::make('shortcode')
                     ->label('Studie')

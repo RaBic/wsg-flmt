@@ -19,6 +19,7 @@ use Filament\Tables\Filters;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Stringable;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class PostResource extends Resource
@@ -53,7 +54,7 @@ class PostResource extends Resource
                 Forms\Components\Hidden::make('published_at')->default(null),
                 Forms\Components\Hidden::make('user_id')
                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                     }),
 
                 Forms\Components\Fieldset::make('')
@@ -89,26 +90,29 @@ class PostResource extends Resource
                             ->columnSpanFull(),
 
                         Forms\Components\Repeater::make('image')
-                            ->label(false)
-                            ->hint('Reihenfolge: von links nach rechts, von oben nach unten')
+                            ->label(null)
+                            // ->hint('Reihenfolge: von links nach rechts, von oben nach unten')
                             ->relationship('image')
                             ->defaultItems(0)
                             ->maxItems(2)
                             ->schema([
                                 Forms\Components\Hidden::make('user_id')
                                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                                     }),
                                 Forms\Components\Hidden::make('purpose')
                                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
                                         $component->state('image');
                                     }),
                                 Forms\Components\FileUpload::make('path')
-                                    ->label(false)
+                                    ->label(null)
                                     ->image()
                                     ->directory(
                                         function (Forms\Get $get): string {
-                                            $slug = $get('../../slug') ?? date('Ymd');
+                                            $slug = date('Ymd');
+                                            if (is_string($get('../../slug'))) {
+                                                $slug = $get('../../slug');
+                                            }
 
                                             return "post/{$slug}";
                                         }
@@ -118,7 +122,7 @@ class PostResource extends Resource
                                     ->getUploadedFileNameForStorageUsing(
                                         function (TemporaryUploadedFile $file): string {
                                             $fullfilename = (string) $file->getClientOriginalName();
-                                            $point = mb_strrpos($fullfilename, '.');
+                                            $point = mb_strrpos($fullfilename, '.') ?: mb_strlen($fullfilename);
                                             $filename = mb_substr($fullfilename, 0, $point);
                                             $extension = mb_substr($fullfilename, $point);
 
@@ -129,11 +133,17 @@ class PostResource extends Resource
                                     ),
                             ])
                             ->itemLabel(
-                                function (array $state, Forms\Get $get): ?string {
-                                    $label = $state['path'] ? (string) str(collect($state['path'])
-                                        ->first())
-                                        ->replace('post/', '')
-                                        ->replace($get('slug') . '/', '') : null;
+                                function (array $state, Forms\Get $get): ?Stringable {
+                                    if (empty($state['path'])) {
+                                        return null;
+                                    }
+
+                                    $label = str((string) reset($state['path']))
+                                        ->replace('post/', '');
+
+                                    if (is_string($get('slug'))) {
+                                        $label = $label->replace($get('slug') . '/', '');
+                                    }
 
                                     return $label;
                                 }

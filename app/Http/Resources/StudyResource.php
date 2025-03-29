@@ -2,20 +2,26 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Contracts\Support\Arrayable;
+use App\Models\Study;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
+/**
+ * @mixin Study
+ */
 class StudyResource extends JsonResource
 {
+    public function __construct(Study $resource)
+    {
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

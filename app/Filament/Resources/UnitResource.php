@@ -39,7 +39,7 @@ class UnitResource extends Resource
             ->schema([
                 Forms\Components\Hidden::make('user_id')
                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                     }),
                 Forms\Components\TextInput::make('name')
                     ->label('Name')

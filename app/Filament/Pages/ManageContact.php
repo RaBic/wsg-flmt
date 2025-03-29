@@ -27,7 +27,7 @@ class ManageContact extends SettingsPage
                     ->label('(Post-)Adresse')
                     ->required()
                     ->autosize(),
-                Forms\Components\TextArea::make('workhours')
+                Forms\Components\Textarea::make('workhours')
                     ->label('Erreichbarkeit'),
                 Forms\Components\TextInput::make('email')
                     ->label('E-Mail-Adresse')

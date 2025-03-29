@@ -15,6 +15,11 @@ enum StudyType: string
         };
     }
 
+    /**
+     * Get the enum values as an array of options for a select input.
+     *
+     * @return array<string, string>
+     */
     public static function toSelectOptions(): array
     {
         return [
@@ -23,11 +28,16 @@ enum StudyType: string
         ];
     }
 
+    /**
+     * Get the enum values as an array of types.
+     *
+     * @return list<string>
+     */
     public static function types(): array
     {
         return [
-            self::Recruiting,
-            self::FollowUp,
+            self::Recruiting->value,
+            self::FollowUp->value,
         ];
     }
 }

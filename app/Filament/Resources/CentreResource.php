@@ -42,15 +42,23 @@ class CentreResource extends Resource
             ->schema([
                 Forms\Components\Hidden::make('user_id')
                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                     }),
                 Forms\Components\Hidden::make('geohelper')
                     ->afterStateHydrated(function (?Centre $centre, Forms\Components\Hidden $component) {
                         if (! $centre || ! $centre->geocode) {
                             $geohelper = 'z.B.: Fliethstraße 112-114, 41061 Mönchengladbach';
                         } else {
+                            $geohelper = 'Keine Latitude/Longitude-Daten gefunden';
                             $geocode = json_decode($centre->geocode, true);
-                            $geohelper = $geocode['lat'] . ', ' . $geocode['lng'];
+                            if (
+                                is_array($geocode)
+                                && isset($geocode['lat'], $geocode['lng'])
+                                && is_string($geocode['lat'])
+                                && is_string($geocode['lng'])
+                            ) {
+                                $geohelper = $geocode['lat'] . ', ' . $geocode['lng'];
+                            }
                         }
 
                         $component->state($geohelper);
@@ -84,7 +92,7 @@ class CentreResource extends Resource
                     ]),
                 Forms\Components\Fieldset::make('Details')
                     ->schema([
-                        Forms\Components\TextArea::make('excerpt')
+                        Forms\Components\Textarea::make('excerpt')
                             ->label('Kurzbeschreibung'),
                         Forms\Components\Select::make('studies')
                             ->label('Studien')
@@ -121,15 +129,22 @@ class CentreResource extends Resource
                     ->searchable()
                     ->formatStateUsing(function (string $state): string {
                         $geocode = json_decode($state, true);
-                        $components = collect($geocode['address_components']);
+
+                        $components = collect(
+                            is_array($geocode) && is_array($geocode['address_components']) ? $geocode['address_components'] : []
+                        );
                         $state = $components->filter(
-                            fn (array $component) => $component['types'][0] === 'administrative_area_level_1'
+                            fn ($component) => is_array($component) && is_array($component['types']) && $component['types'][0] === 'administrative_area_level_1'
                         )->first();
                         $city = $components->filter(
-                            fn (array $component) => $component['types'][0] === 'locality'
+                            fn ($component) => is_array($component) && is_array($component['types']) && $component['types'][0] === 'locality'
                         )->first();
 
-                        return $city['long_name'] . ', ' . $state['short_name'];
+                        if (isset($state['long_name'], $city['long_name'])) {
+                            return $city['long_name'] . ', ' . $state['long_name'];
+                        }
+
+                        return 'Ort nicht gefunden';
                     }),
                 Tables\Columns\TextColumn::make('studies_list')
                     ->label('Studien')

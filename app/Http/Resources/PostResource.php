@@ -2,20 +2,26 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Contracts\Support\Arrayable;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use JsonSerializable;
 
+/**
+ * @mixin Post
+ */
 class PostResource extends JsonResource
 {
+    public function __construct(Post $resource)
+    {
+        parent::__construct($resource);
+    }
+
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
-     * @return array|Arrayable|JsonSerializable
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,

@@ -1,0 +1,14 @@
+parameters:
+    ignoreErrors:
+        -
+            messages: 
+                - "#Call to an undefined static method [a-zA-Z0-9\\\\_]+Vite::integrity\\(\\).#"
+            paths:
+                - app/Shop/Modules/*
+        -
+            messages: 
+                - "#Call to an undefined method [a-zA-Z0-9\\\\_]+Validator::stopOnFirstFailure\\(\\).#"
+            paths:
+                - app/Traits/Backend/*
+
+

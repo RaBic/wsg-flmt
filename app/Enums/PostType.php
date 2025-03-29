@@ -15,6 +15,11 @@ enum PostType: string
         };
     }
 
+    /**
+     * Get the enum values as an array of options for a select input.
+     *
+     * @return array<string, string>
+     */
     public static function toSelectOptions(): array
     {
         return [
@@ -23,11 +28,16 @@ enum PostType: string
         ];
     }
 
+    /**
+     * Get the enum values as an array of types.
+     *
+     * @return list<string>
+     */
     public static function types(): array
     {
         return [
-            self::Blog,
-            self::Event,
+            self::Blog->value,
+            self::Event->value,
         ];
     }
 }

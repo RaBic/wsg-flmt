@@ -11,6 +11,6 @@ class FilamentInfoWidget extends BaseWidget
     {
         // Only show the widget to admins
         // return Filament::auth()->user()...;
-        return Auth::user()->hasRole('super_admin');
+        return Auth::user()?->hasRole('super_admin') ?? false;
     }
 }

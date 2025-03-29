@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 // use Closure;
 use App\Models\User;
 // use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -52,7 +53,7 @@ class UserResource extends Resource
                     ->relationship(
                         'roles',
                         'name',
-                        fn (Builder $query) => ! Auth::user()->hasRole('super_admin') ? $query->where('id', '!=', 1) : $query
+                        fn (Builder $query) => ! Auth::user()?->hasRole('super_admin') ? $query->where('id', '!=', 1) : $query
                     )
                     ->multiple()
                     ->preload(true)
@@ -90,7 +91,10 @@ class UserResource extends Resource
                             ->rule('required', fn ($get) => (bool) $get('new_password'))
                             ->same('new_password')
                             ->dehydrated(false),
-                    ])->visible(fn ($livewire) => $livewire instanceof Pages\EditUser),
+                    ])->visible(
+                        fn ($livewire) => $livewire instanceof Pages\EditUser
+                                && Filament::auth()->user()?->hasRole('super_admin')
+                    ),
             ]);
     }
 

@@ -34,13 +34,11 @@ class EventServiceProvider extends ServiceProvider
     ];
 
     /**
-     * The model observers for your application.
+     * The model observers to register.
      *
-     * @var array
+     * @var array<string, string|object|array<int, string|object>>
      */
-    protected $observers = [
-        // SettingsProperty::class => [Observers\SettingObserver::class],
-    ];
+    protected $observers = [];
 
     /**
      * Register any events for your application.

@@ -4,14 +4,13 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 
 class ApiResponseHeaders
 {
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        $response = $next($request); // ->header('Content-Encoding', 'deflate, gzip');
-
         // Get the initial method sent by client
         $initialMethod = $request->method();
 
@@ -19,13 +18,13 @@ class ApiResponseHeaders
         $request->setMethod('get');
 
         // Get response
-        /** @var Response $response */
         $response = $next($request);
 
         // Generate Etag
         $etag = md5(json_encode($response->headers->get('origin')) . (string) $response->getContent());
         // Load the Etag sent by client
-        $requestIfNoneMatch = str_replace('"', '', $request->headers->get('if-none-match'));
+        $ifNoneMatchHeader = $request->headers->get('if-none-match');
+        $requestIfNoneMatch = $ifNoneMatchHeader ? str_replace('"', '', $ifNoneMatchHeader) : null;
         // Check to see if Etag has changed
         if ($requestIfNoneMatch && $requestIfNoneMatch == $etag) {
             $response->setNotModified();
@@ -35,10 +34,22 @@ class ApiResponseHeaders
 
         $content = $response->getContent();
         if ($response->getStatusCode() < 300 && ! empty($content)) {
-            $data = json_decode($response->getContent(), true)['data'];
-            $lastModifiedString = $data['updated_at'] ?? (collect($data)->pluck('updated_at')->max() ?? null);
+            $responseContent = json_decode($response->getContent(), true);
+            $data = [];
+            if (is_array($responseContent) && isset($responseContent['data'])) {
+                $data = $responseContent['data'];
+            }
 
-            if ($lastModifiedString) {
+            $lastModifiedString = null;
+            if (is_array($data)) {
+                if (isset($data['updated_at'])) {
+                    $lastModifiedString = $data['updated_at'];
+                } elseif (is_array($data)) {
+                    $lastModifiedString = collect($data)->pluck('updated_at')->max();
+                }
+            }
+
+            if ($lastModifiedString && is_string($lastModifiedString)) {
                 // Load the IfModifiedSince sent by client
                 $requestIfModifiedSinceString = $request->headers->get('if-modified-since');
 

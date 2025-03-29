@@ -47,7 +47,7 @@ class PageResource extends Resource
                 Forms\Components\Hidden::make('published_at')->default(null),
                 Forms\Components\Hidden::make('user_id')
                     ->afterStateHydrated(function (Forms\Components\Hidden $component) {
-                        $component->state(Filament::auth()->user()->getAuthIdentifier());
+                        $component->state(Filament::auth()->user()?->getAuthIdentifier());
                     }),
 
                 Forms\Components\Fieldset::make('')
