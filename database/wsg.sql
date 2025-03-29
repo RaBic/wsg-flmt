@@ -232,7 +232,6 @@ DROP TABLE IF EXISTS `images`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `images` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `cockpit_id` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `purpose` varchar(16) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sort` int unsigned NOT NULL DEFAULT '0',

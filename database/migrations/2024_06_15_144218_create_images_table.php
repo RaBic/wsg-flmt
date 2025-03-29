@@ -14,7 +14,6 @@ return new class() extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('cockpit_id', 32)->nullable()->default(null);
             $table->string('path');
             $table->string('purpose', 16)->nullable()->default(null);
             $table->integer('sort')->unsigned()->default(0);
