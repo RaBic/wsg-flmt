@@ -54,10 +54,10 @@ class CentreResource extends Resource
                             if (
                                 is_array($geocode)
                                 && isset($geocode['lat'], $geocode['lng'])
-                                && is_string($geocode['lat'])
-                                && is_string($geocode['lng'])
+                                && is_float($geocode['lat'])
+                                && is_float($geocode['lng'])
                             ) {
-                                $geohelper = $geocode['lat'] . ', ' . $geocode['lng'];
+                                $geohelper = (string) $geocode['lat'] . ', ' . (string) $geocode['lng'];
                             }
                         }
 
