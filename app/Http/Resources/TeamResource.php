@@ -31,6 +31,7 @@ class TeamResource extends JsonResource
             'excerpt' => $this->getTranslations('excerpt'),
             'description' => $this->getTranslations('description'),
             'sort' => $this->sort,
+            'published' => $this->published,
             'updated_at' => $this->updated_at,
             'image' => $this->image,
             'unit' => $this->unit,
