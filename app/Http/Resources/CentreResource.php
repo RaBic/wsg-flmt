@@ -28,14 +28,15 @@ class CentreResource extends JsonResource
             'centre' => $this->centre,
             'unit' => $this->unit,
             'address' => $this->address,
-            'geocode' => $this->geocode,
+            'geocode' => json_decode($this->geocode, true),
             'leader' => $this->leader,
             'leader_position' => $this->getTranslations('leader_position'),
-            'excerpt' => $this->getTranslations('excerpt'),
+            'excerpt' => count($this->getTranslations('excerpt')) > 0 ? $this->getTranslations('excerpt') : null,
             'url' => $this->url,
             'phone' => $this->phone,
             'email' => $this->email,
             'updated_at' => $this->updated_at,
+            'studies' => $this->studies,
         ];
     }
 }

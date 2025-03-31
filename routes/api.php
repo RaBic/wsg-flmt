@@ -179,7 +179,7 @@ Route::group(
 
         Route::post('/centres', function (Request $request) {
             $centresQuery = Centre::query()
-                ->with(['studies']);
+                ->with(['studies:id']);
 
             if ($request->filled('filter')) {
                 $filter = $request->input('filter');
@@ -199,7 +199,7 @@ Route::group(
             return CentreResource::collection($centres);
         });
         Route::get('/centre/{id}', fn ($id) => new CentreResource(
-            Centre::where('id', $id)->with(['studies'])->firstOrFail()
+            Centre::where('id', $id)->with(['studies:id'])->firstOrFail()
         ));
     }
 );
