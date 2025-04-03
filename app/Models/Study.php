@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -88,7 +89,7 @@ class Study extends Model
     }
 
     /**
-     * @return BelongsToMany<Centre, $this, StudyCentre>
+     * @return BelongsToMany<Centre, $this, Pivot, 'pivot'>
      */
     public function centres(): BelongsToMany
     {

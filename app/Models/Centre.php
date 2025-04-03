@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Spatie\Translatable\HasTranslations;
 
 /**
@@ -89,7 +90,7 @@ class Centre extends Model
     }
 
     /**
-     * @return BelongsToMany<Study, $this, StudyCentre>
+     * @return BelongsToMany<Study, $this, Pivot, 'pivot'>
      */
     public function studies(): BelongsToMany
     {
